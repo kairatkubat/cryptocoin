@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:crypto/features/crypto_coins/crypto_list/bloc/crypto_list_bloc.dart';
 import 'package:crypto/features/crypto_coins/crypto_list/crypto_list.dart';
 import 'package:crypto/repositories/crypto_coins/crypto_coins.dart';
@@ -32,8 +34,10 @@ class _CryptoConinsListState extends State<CryptoConinsList> {
     return Scaffold(
         appBar: AppBar(title: const Text('CryptoCoins')),
         body: RefreshIndicator(
-          onRefresh: ()async{
-             _cryptoListBloc.add(LoadCryptoList());
+          onRefresh: () async{
+            final completer = Completer();  
+             _cryptoListBloc.add(LoadCryptoList(completer: completer));
+            return   completer.future; 
           },
           child: BlocBuilder<CryptoListBloc, CryptoListState>(
             bloc: _cryptoListBloc,
